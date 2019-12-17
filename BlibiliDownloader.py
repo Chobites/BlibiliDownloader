@@ -70,7 +70,7 @@ def downloadUperVod(uper_Uid_num, pager_total_num, directory):
 # Set the file path to store videos
 filepath ='/filepath/'
 #Set Uper's Uid
-uper_uid = 396812396
+uper_uid = xxxxxxxxx
 [pager_total_num, uper_name]=Get_VodPagesNum(uper_uid)
 directory =filepath+uper_name
 downloadUperVod(uper_uid,pager_total_num,directory)
