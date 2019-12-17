@@ -68,7 +68,7 @@ def downloadUperVod(uper_Uid_num, pager_total_num, directory):
         browser.close()
 
 # Set the file path to store videos
-filepath ='E:/软件脚本/python/B站视频批量下载/source_B/'
+filepath ='/filepath/'
 #Set Uper's Uid
 uper_uid = 396812396
 [pager_total_num, uper_name]=Get_VodPagesNum(uper_uid)
