@@ -6,6 +6,8 @@ from selenium import webdriver
 from you_get import common as you_get
 import time
 import os
+
+
 # Get the number of video list pages and uper's name
 def Get_VodPagesNum(uper_Uid_num):
     uper_Uid_str = str(uper_Uid_num)
@@ -49,7 +51,6 @@ def downloadUperVod(uper_Uid_num, pager_total_num, directory):
         page_index_num = page_index
         page_index_str = str(page_index_num)
         page_url = 'https://space.bilibili.com/' + uper_Uid_str + '/video?tid=0&page=' + page_index_str
-        print(page_url)
         # Open FireFox
         browser = webdriver.Firefox()
         # Open uper's video list page
@@ -57,22 +58,31 @@ def downloadUperVod(uper_Uid_num, pager_total_num, directory):
         time.sleep(2)
         # Find all video href in this video list page
         vod_urlList = browser.find_elements_by_class_name('cover')
-        # Counter of the downloaded video in this page
-        count = 1
         # Create a file path for each video list page,all videos in this page will be downloaded in individual file
         Downlaod_directory = directory + '/page'+page_index_str
         isExists= os.path.exists(Downlaod_directory)
         if not isExists:
          os.mkdir(Downlaod_directory)
+        href_list = []
         for url in vod_urlList:
-            print('Downloading the ', page_index, 'th page ', count, 'th video')
-            count = count + 1
             href = url.get_attribute("href")
-            print(href)
-            # sys.argv = ['you-get', '-o', Downlaod_directory, href, '--debug']
-            sys.argv = ['you-get', '-o', Downlaod_directory, href]
-            you_get.main()
+            if href not in href_list:
+              href_list.append(href)
         browser.close()
+        # Counter of the downloaded video in this page
+        count = 0
+        for vod_href in href_list[count:]:
+          count = count + 1
+          print('Total videos in this page :',len(href_list))
+          print(vod_href)
+          print('Downloading the ', page_index, 'th page ', count, 'th video')
+          try:
+            sys.argv = ['you-get', '-o', Downlaod_directory, vod_href]
+            you_get.main()
+          except TypeError:
+              time.sleep(2)
+              sys.argv = ['you-get', '-o', Downlaod_directory, vod_href, '--debug']
+              you_get.main()
 # Set the file path to store videos
 filepath = 'H:/软件脚本/python/B站视频批量下载/source_B/'
 # Set Uper's Uid
